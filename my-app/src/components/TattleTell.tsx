@@ -1,28 +1,28 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Title } from './Title';
 import { Description } from './Description';
 import { ImageButton } from './ImageButton';
 
 export const TattleTell = () => {
     return (
-        <div style={styles.tattleTell}>
-            <ImageButton/>
-        </div>
-    )
-}
+        <View style={styles.container}>
+            <View style={styles.tattleTell}>
+                <Title />
+                <Description />
+                <ImageButton />
+            </View>
+        </View>
+    );
+};
+
+export default TattleTell;
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     tattleTell: {
-        backgroundColor: '#79B791',
-        paddingVertical: '10%'
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    title: {
-        marginBottom: '10%'
-    },
-    description: {
-        marginBottom: '20%'
-    },
-    imageButton: {
-        marginTop: '20%'
-    }
 });
