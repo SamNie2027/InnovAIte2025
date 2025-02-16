@@ -1,16 +1,25 @@
 import { Button, Pressable, StyleSheet, Text } from 'react-native';
 import { useCameraPermission } from 'react-native-vision-camera';
 import { useFonts } from 'expo-font';
+import useLocation from '../hooks/useLocation';
 
 export const ImageButton = () => {
     const [fonts] = useFonts({
         'Lexend': require('../../assets/fonts/Lexend/Lexend-VariableFont_wght.ttf')
     });
 
+    const getAllPermissions = async () => {
+        requestPermission();
+        /*const {latitude, longitude, errorMsg} = useLocation();
+        if (errorMsg) {
+            console.log(errorMsg);
+        }*/
+    }
+
     const { hasPermission, requestPermission } = useCameraPermission();
     
     return (
-        <Pressable style={styles.button} onPress={requestPermission}>
+        <Pressable style={styles.button} onPress={getAllPermissions}>
             <Text style={styles.buttonText}>Take a picture!</Text>
         </Pressable>
     )

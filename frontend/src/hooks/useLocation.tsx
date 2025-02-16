@@ -25,3 +25,5 @@ const useLocation = () => {
 
     return {latitude, longitude, errorMsg}
 }
+
+export default useLocation;

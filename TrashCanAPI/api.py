@@ -10,7 +10,8 @@ def submit_image():
     longitude = request.form['longitude']
     processed = preprocess(image)
     if (processed):
-        queryModel1(processed, latitude, longitude)
+        sendModel1(processed, latitude, longitude)
+        sendModel2(processed)
     
 
     return 'received data'
