@@ -7,11 +7,15 @@ from FullnessModel import FullnessModel
 
 app = Flask(__name__)
 
+port = int(os.environ.get("PORT", 5000))
+print(f"Starting Flask app on port {port}...")  # EARLY PRINT
+
 @app.route('/submitImage', methods=['POST'])
-def submit_image(fullness_model, compare_model):
-    raw_image = request.form['image']
-    latitude = request.form['latitude']
-    longitude = request.form['longitude']
+def submit_image():
+    print('post called')
+    raw_image = request.json['image']
+    latitude = request.json['latitude']
+    longitude = request.json['longitude']
     print(raw_image)
     print(latitude)
     print(longitude)
@@ -28,7 +32,17 @@ def submit_image(fullness_model, compare_model):
     return 'received data'
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = os.environ.get("PORT")
+    print(f"PORT from environment: {port}")  # Debugging line
+
+    if not port:
+        print("⚠️ PORT environment variable is missing! Using default 5000.")
+        port = 5000
+    else:
+        port = int(port)
+
+    print(f"Running on port {port}")  # Debugging output
+    app.run(debug=False, host='0.0.0.0', port=port)
     # initialize models
     # fullness_model = FullnessModel()
     # compare_model = CompareImagesModel()
