@@ -13,12 +13,12 @@ from PIL import Image
 """
 Class used to train and predict if the trash can in the given image is full or empty
 """
-class FullnessModel:
+class FullnessModel():
     """
     Initialization method.
     Pre-process data, build and train the model.
     """
-    def __init__(self, load =True,train_dir = '../Trash/Train', validate_dir = '../Trash/Validate'):
+    def __init__(self, load = True ,train_dir = '../Trash/Train', validate_dir = '../Trash/Validate'):
         self.train_dir = train_dir
         self.validate_dir = validate_dir
         self.model = None
