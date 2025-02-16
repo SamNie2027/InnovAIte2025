@@ -6,7 +6,7 @@ port = int(os.environ.get("PORT", 5000))
 print(f"Starting Flask app on port {port}...")  # EARLY PRINT
 
 @app.route('/submitImage', methods=['POST'])
-def submit_image(fullness_model, compare_model):
+def submit_image():
     print('post called')
     raw_image = request.form['image']
     latitude = request.form['latitude']
