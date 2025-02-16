@@ -23,6 +23,7 @@ def submit_image(fullness_model, compare_model):
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))  # Use the assigned PORT or default to 5000
+    print(f"Running on port {port}")  # Debugging line
     app.run(debug=True, host='0.0.0.0', port=port)
     # initialize models
     # fullness_model = FullnessModel()
