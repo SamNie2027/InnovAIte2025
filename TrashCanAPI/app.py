@@ -1,4 +1,9 @@
 from flask import Flask, jsonify, request
+from preprocess import preprocess
+from updateTrashCanStatus import updateTrashCanStatusMain
+from CompareImagesModel import CompareImagesModel
+# from CompareImagesTFModel import CompareImagesModel
+# from FullnessModel import FullnessModel
 import os
 
 app = Flask(__name__)
@@ -29,6 +34,17 @@ def submit_image():
         latitude = data["latitude"]
         longitude = data["longitude"]
 
+        # city_worker = request.form['city_worker'] # expected to be a boolean
+        image = preprocess(raw_image)
+        # if (image):
+        #     if (city_worker):
+        #         full_likelihood = -1
+        #     else:
+        #         full_likelihood = fullness_model.predict(image)
+        # 
+        full_likelihood = 1
+        updateTrashCanStatusMain(image, latitude, longitude, full_likelihood, compare_model) # NOT IMPLEMENTED 
+
         response = {
             "message": "Image received successfully",
             "data": {
@@ -44,3 +60,6 @@ def submit_image():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=True, host='0.0.0.0', port=port)
+    # initialize models
+    # fullness_model = FullnessModel()
+    compare_model = CompareImagesModel()
