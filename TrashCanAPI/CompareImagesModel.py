@@ -71,3 +71,6 @@ class CompareImagesModel():
         similarity = cosine_similarity(baseline_features.numpy(), uploaded_features.numpy())[0][0]
 
         return similarity
+    
+    def getSimilarity(self, baseline_img, img):
+        return self.predict(baseline_img, img)
