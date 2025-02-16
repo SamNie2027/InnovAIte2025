@@ -6,11 +6,11 @@ def updateTrashCanStatus(image, longitude, latitude, full_likelihood, model):
     '''
 
     # get labeled images for nearby trash cans
-    image_folder_path, trash_can_ids = getNearbyTrashCanImages(longitude, latitude) # NOT IMPLEMENTED
+    image_folder_paths, trash_can_ids = getNearbyTrashCanImages(longitude, latitude) # NOT IMPLEMENTED
 
     # determine which trash can id to update
     if (len(trash_can_ids) > 1):
-        trash_can_id = matchTrashCanID(image, image_folder_path, trash_can_ids, model) # NOT IMPLEMENTED
+        trash_can_id = matchTrashCanID(image, image_folder_paths, trash_can_ids, model) # NOT IMPLEMENTED
     elif (len(trash_can_id) == 1):
         trash_can_id = trash_can_ids[0]
     else:
@@ -22,7 +22,7 @@ def updateTrashCanStatus(image, longitude, latitude, full_likelihood, model):
 
     return 
 
-def matchTrashCanID(image, image_folder_path, trash_can_ids, model):
+def matchTrashCanID(image, image_folder_paths, trash_can_ids, model):
     '''
     Determines which trash can ID that given a image matches with by 
     comparing to labeled trash can images. 
@@ -33,9 +33,9 @@ def matchTrashCanID(image, image_folder_path, trash_can_ids, model):
     trash_can_ids is the trash can id for the folder paths given.
     model is the compare model.
     '''
-    matched_id = 1
+    matched_id = -1
 
-    
+
 
     return matched_id
 
