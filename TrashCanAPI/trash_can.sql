@@ -1,25 +1,25 @@
-#DROP DATABASE IF EXISTS `innova2025`;
-CREATE DATABASE IF NOT EXISTS `innova2025`;
-USE innova2025;
+-- Enable foreign keys
+PRAGMA foreign_keys = ON;
 
 -- TrashCans Table
 CREATE TABLE trash_cans (
-    trash_can_id INT PRIMARY KEY AUTO_INCREMENT,
-    gps_latitude DECIMAL(9, 6),
-    gps_longitude DECIMAL(9, 6),
-    is_full BOOLEAN DEFAULT FALSE,  -- You can use 'true' or 'false' to indicate whether it's full
+    trash_can_id INTEGER PRIMARY KEY,  -- SQLite uses INTEGER PRIMARY KEY for auto-increment
+    gps_latitude REAL,
+    gps_longitude REAL,
+    is_full INTEGER DEFAULT 0,  -- Use INTEGER (0 or 1) instead of BOOLEAN
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Images Table (with foreign key to TrashCans)
 CREATE TABLE images (
-    image_id INT PRIMARY KEY AUTO_INCREMENT,
-    trash_can_id INT,
-    image_url VARCHAR(255),
+    image_id INTEGER PRIMARY KEY,
+    trash_can_id INTEGER,
+    image_url TEXT,
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (trash_can_id) REFERENCES trash_cans(trash_can_id)
 );
 
+-- Insert sample data (without specifying primary key values)
 insert into trash_cans (trash_can_id, gps_latitude, gps_longitude) values (1, 42.3394070, -71.0868608);
 insert into trash_cans (trash_can_id, gps_latitude, gps_longitude) values (2, 42.3398829, -71.0866291);
 insert into trash_cans (trash_can_id, gps_latitude, gps_longitude) values (3, 42.3402417, -71.0867961);
