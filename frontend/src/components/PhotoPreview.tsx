@@ -32,7 +32,7 @@ const PhotoPreview = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          image: `data:image/jpeg;base64,${photo?.base64 || ''}`, // Ensure photo.base64 is defined
+          image: `data:image/jpg;base64,${photo?.base64 || ''}`, // Ensure photo.base64 is defined
           latitude,
           longitude
         }),
