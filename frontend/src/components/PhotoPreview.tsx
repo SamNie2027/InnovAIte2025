@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import useLocation from "../hooks/useLocation";
+import * as ImageManipulator from "expo-image-manipulator";
 
 const PhotoPreview = ({
   photo,
@@ -22,37 +23,63 @@ const PhotoPreview = ({
   const [fonts] = useFonts({
     Lexend: require("../../assets/fonts/Lexend/Lexend-VariableFont_wght.ttf"),
   });
-  let {longitude, latitude, errorMsg} = useLocation();
+  let { longitude, latitude, errorMsg } = useLocation();
 
-  const handleUploadPhoto = () => {
-    if (photo.base64) {
-      const sanitizedBase64 = photo.base64.replace(/</g, ""); // Remove '<' characters from the base64 string
+  const handleUploadPhoto = async () => {
+    if (photo.uri) {
+      try {
+        // Resize the image to 264x264 without saving it to disk
+        const resizedImage = await ImageManipulator.manipulateAsync(
+          photo.uri, // The URI of the original photo
+          [{ resize: { width: 264, height: 264 } }], // Resize to 264x264
+          { compress: 1, format: ImageManipulator.SaveFormat.PNG } // Use 'jpeg' format
+        );
 
-      fetch('https://innovaite2025.onrender.com', {
-          method: 'POST',
+        console.log("Resized Image:", resizedImage); // Log resized image to check the output
+
+        // Convert the resized image URI to base64 without saving it to the file system
+        const base64 = await fetch(resizedImage.uri)
+          .then((response) => response.blob())
+          .then((blob) => {
+            return new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string); // Base64 string result
+              reader.onerror = reject;
+              reader.readAsDataURL(blob); // Read as base64 data URL
+            });
+          });
+
+        // Clean the base64 string if needed (e.g., remove '<' characters)
+        const sanitizedBase64 = base64.replace(/</g, "");
+
+        // Make the POST request with the base64 image and additional data
+        fetch("https://innovaite2025.onrender.com", {
+          method: "POST",
           headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            image: `data:image/jpeg;base64,${sanitizedBase64}`, // Use sanitized base64
+            image: sanitizedBase64, // Send the base64 image directly
             latitude,
-            longitude
+            longitude,
           }),
-      })
-      .then(response => response.json())
-      .then(data => {
-          console.log("Server Response:", data); // Handle response
-      })
-      .catch(error => {
-          console.error("Error uploading photo:", error);
-      });
-  
-      console.log(`data:image/jpeg;base64,${sanitizedBase64}`);
-      console.log(latitude);
-      console.log(longitude);  
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Server Response:", data); // Handle server response
+          })
+          .catch((error) => {
+            console.error("Error uploading photo:", error);
+          });
+
+        console.log(latitude);
+        console.log(longitude);
+      } catch (error) {
+        console.error("Error processing photo:", error);
+      }
     }
-};
+  };
 
   return (
     <SafeAreaView style={styles.container}>

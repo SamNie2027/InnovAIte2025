@@ -6,6 +6,7 @@ const cors = require("cors");
 const request = require("request");
 
 const app = express();
+app.use(express.json({ limit: '100mb' }));  // increasing size limit
 app.use(cors());
 app.use(express.json()); // ✅ Middleware to parse JSON request body
 
