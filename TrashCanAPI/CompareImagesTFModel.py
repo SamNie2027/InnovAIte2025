@@ -5,6 +5,8 @@ from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.preprocessing import image
 from sklearn.metrics.pairwise import cosine_similarity
 
+# This is tensorflow version of model.
+
 class CompareImagesModel():
     def __init__(self, base_model="resnet50"):
         # Load ResNet model without classification head

@@ -6,8 +6,8 @@ TattleTell is a mobile application designed to simplify the process of reporting
 - **Location-Based Logging:** Uses GPS to automatically log maintenance issues based on the user's location.
 - **User-Friendly Interface:** Streamlined experience—users only need to take a picture.
 - **Automated Trash Can Detection:**
-  - Uses an AI model to determine if a trash can is full.
-  - Another AI model, in tandem with geolocation data, identifies which trash can is being photographed.
+  - Uses the FullnessModel AI model to determine if a trash can is full.
+  - Uses CompareImagesModel AI model, in tandem with geolocation data, identifies which trash can is being photographed.
 
 ## **Future Extensions**
 - **Litter Detection:** AI model to recognize and categorize litter in images.
@@ -25,7 +25,7 @@ TattleTell is a mobile application designed to simplify the process of reporting
   - Updating the database with new reports.
 
 ### **Trash Cans Cleaned Folder (Symlink)**
-- Stores images of trash cans in the database for model training and validation.
+- Stores images of trash cans in the database for identifying with trashcan was photographed.
 
 ### **Backend & Frontend Folders**
 - **Backend:**
