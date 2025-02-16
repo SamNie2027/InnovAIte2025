@@ -4,7 +4,7 @@ import { TattleTell } from "../components/TattleTell";
 export const App = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
-      <TattleTell/>
+      <TattleTell />
     </SafeAreaView>
   );
 };
@@ -12,7 +12,7 @@ export const App = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#79B791',
+    backgroundColor: "#79B791",
   },
 });
 

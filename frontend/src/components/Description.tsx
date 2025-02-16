@@ -13,7 +13,7 @@ export const Description = () => {
 
 Take a picture of a Trash can if you think it’s too full. 
 
-Your picture will be used to inform the city so they can reduce litter!`}   
+Your picture will be used to inform the city so they can reduce litter!`}
       </Text>
     </View>
   );
@@ -37,5 +37,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "white",
     lineHeight: 30,
-  }
+  },
 });
