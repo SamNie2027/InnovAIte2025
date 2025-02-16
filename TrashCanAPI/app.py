@@ -1,5 +1,4 @@
 from flask import Flask, request
-port = 5000
 app = Flask(__name__)
 
 @app.route('/submitImage', methods=['POST'])
@@ -23,7 +22,8 @@ def submit_image(fullness_model, compare_model):
     return 'received data'
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    port = int(os.environ.get("PORT", 5000))  # Use the assigned PORT or default to 5000
+    app.run(debug=True, host='0.0.0.0', port=port)
     # initialize models
     # fullness_model = FullnessModel()
     # compare_model = CompareImagesModel()
