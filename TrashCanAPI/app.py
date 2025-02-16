@@ -1,8 +1,8 @@
 from flask import Flask, request
-from preprocess import *
-import updateTrashCanStatus
-import CompareImagesModel
-import FullnessModel
+from preprocess import preprocess
+from updateTrashCanStatus import updateTrashCanStatus
+from CompareImagesModel import CompareImagesModel
+from FullnessModel import FullnessModel
 
 app = Flask(__name__)
 

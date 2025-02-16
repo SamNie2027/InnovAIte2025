@@ -74,3 +74,4 @@ class CompareImagesModel():
     
     def getSimilarity(self, baseline_img, img):
         return self.predict(baseline_img, img)
+    
