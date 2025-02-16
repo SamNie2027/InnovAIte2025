@@ -3,7 +3,7 @@ from preprocess import preprocess
 from updateTrashCanStatus import updateTrashCanStatusMain
 from CompareImagesModel import CompareImagesModel
 # from CompareImagesTFModel import CompareImagesModel
-# from FullnessModel import FullnessModel
+from FullnessModel import FullnessModel
 import os
 
 app = Flask(__name__)
@@ -13,6 +13,10 @@ app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100 MB limit
 
 port = int(os.environ.get("PORT", 5000))
 print(f"Starting Flask app on port {port}...")  # EARLY PRINT
+
+# initialize models
+fullness_model = FullnessModel(load = True)
+compare_model = CompareImagesModel()
 
 @app.route('/submitImage', methods=['POST'])
 def submit_image():
@@ -42,7 +46,8 @@ def submit_image():
         #     else:
         #         full_likelihood = fullness_model.predict(image)
         # 
-        full_likelihood = 1
+        full_likelihood = fullness_model.predict(image)
+        print("Is full prediction:", full_likelihood)
         updateTrashCanStatusMain(image, latitude, longitude, full_likelihood, compare_model) # NOT IMPLEMENTED 
 
         response = {
@@ -60,6 +65,4 @@ def submit_image():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=True, host='0.0.0.0', port=port)
-    # initialize models
-    # fullness_model = FullnessModel()
-    compare_model = CompareImagesModel()
+    
