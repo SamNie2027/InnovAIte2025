@@ -2,6 +2,8 @@ from config import DATABASE_PATH
 from PIL import Image
 import os
 import sqlite3
+import cv2
+import numpy as np
 
 def updateTrashCanStatus(image, longitude, latitude, full_likelihood, model):
     '''
@@ -65,13 +67,31 @@ def matchTrashCanID(image, image_folder_paths, trash_can_ids, model):
 
     return matched_id
 
-def cutOutTrashCan(image):
-    '''
-    Cuts out the trash can from image to leave only the background.
+def CutOutTrashCan(image: Image.Image) -> Image.Image:
+    """
+    Blacks out the middle portion of the image, assuming the object to be removed is in the center.
+    Adjusts dynamically based on image size.
+    """
 
-    Currently not Implemented (Stretch Goal)
-    '''
-    return image
+    # Convert PIL (RGB) to OpenCV (BGR)
+    open_cv_image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+    (h, w) = open_cv_image.shape[:2]
+
+    # Define the central area (adjust percentage as needed)
+    center_x, center_y = w // 2, h // 2
+    box_width, box_height = int(w * 0.4), int(h * 0.5)  # 40% width, 50% height
+
+    # Compute box coordinates
+    x1, y1 = center_x - box_width // 2, center_y - box_height // 2
+    x2, y2 = center_x + box_width // 2, center_y + box_height // 2
+
+    # Black out the middle section
+    open_cv_image[y1:y2, x1:x2] = (0, 0, 0)  # Fill with black
+
+    # Convert back to PIL
+    output_pil = Image.fromarray(cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2RGB))
+    
+    return output_pil
 
 def updateTrashCanStatus(trash_can_id, full_likelihood):
     """
