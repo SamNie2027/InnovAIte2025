@@ -14,19 +14,20 @@ def submit_image():
     try:
         data = request.get_json()
         
+        print("Received JSON:", data)  # Debugging output
+
         if not data:
             return jsonify({"error": "Invalid request, no JSON received"}), 400
 
-        raw_image = data.get('image')
-        latitude = data.get('latitude')
-        longitude = data.get('longitude')
+        required_fields = ["image", "latitude", "longitude"]
+        missing_fields = [field for field in required_fields if field not in data]
 
-        if not all([raw_image, latitude, longitude]):
-            return jsonify({"error": "Missing required fields"}), 400
+        if missing_fields:
+            return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
 
-        print("Received image:", raw_image)
-        print("Latitude:", latitude)
-        print("Longitude:", longitude)
+        raw_image = data["image"]
+        latitude = data["latitude"]
+        longitude = data["longitude"]
 
         response = {
             "message": "Image received successfully",
@@ -36,9 +37,10 @@ def submit_image():
             }
         }
         return jsonify(response), 200  # HTTP 200 OK
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500  # Internal Server Error
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(debug=False, host='0.0.0.0', port=port)
+    app.run(debug=True, host='0.0.0.0', port=port)
