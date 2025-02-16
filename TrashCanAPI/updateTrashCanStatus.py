@@ -1,15 +1,17 @@
-from config import DATABASE_PATH
+from config import DATABASE_PATH, IMAGES_PATH
 from PIL import Image
 import os
 import sqlite3
 
-def updateTrashCanStatus(image, latitude, longitude, full_likelihood, model):
+def updateTrashCanStatusMain(image, latitude, longitude, full_likelihood, model):
     '''
     Finds and updates the status of a trashcan in trashcan database. 
     '''
 
     # get labeled images for nearby trash cans
     image_folder_paths, trash_can_ids = getNearbyTrashCanImages(latitude, longitude)
+    print("image_folder_paths:", image_folder_paths)
+    print("IDs:", trash_can_ids)
 
     # determine which trash can id to update
     if (len(trash_can_ids) > 1):
@@ -19,7 +21,8 @@ def updateTrashCanStatus(image, latitude, longitude, full_likelihood, model):
     else:
         # no nearby trashcans
         return
-    
+    print("ID:", trash_can_id)
+
     # Update Database
     updateTrashCanStatus(trash_can_id, full_likelihood)
 
@@ -174,7 +177,14 @@ def getNearbyTrashCanImages(latitude, longitude, range=0.001):
                 image_dict[tc_id].append(image_url)  # Append in case of multiple images per trash can
 
             # 4. Ensure indexes match: extract images in the same order as trash_can_ids
-            image_paths = [image_dict[tc_id] if tc_id in image_dict else [] for tc_id in trash_can_ids]
+            # image_paths = [image_dict[tc_id] if tc_id in image_dict else [] for tc_id in trash_can_ids]
+            image_paths = [img for tc_id in trash_can_ids for img in image_dict.get(tc_id, [])]
+
+            # 5. Clean the paths:
+            for i, path in enumerate(image_paths):
+                path_temp = os.path.dirname(path)  # Get directory name
+                cleaned_path = os.path.join(IMAGES_PATH, path_temp)  # Join paths correctly
+                image_paths[i] = cleaned_path
 
     except Exception as e:
         print(f"Error getting nearbyTrashCans: {str(e)}")

@@ -1,7 +1,8 @@
 from flask import Flask, request
 from preprocess import preprocess
-from updateTrashCanStatus import updateTrashCanStatus
-from CompareImagesModel import CompareImagesModel
+from updateTrashCanStatus import updateTrashCanStatusMain
+# from CompareImagesModel import CompareImagesModel
+from CompareImagesTFModel import CompareImagesModel
 from FullnessModel import FullnessModel
 
 app = Flask(__name__)
@@ -20,9 +21,9 @@ def submit_image(fullness_model, compare_model):
     #     if (city_worker):
     #         full_likelihood = -1
     #     else:
-    # full_likelihood = fullness_model.predict(image)
+    #         full_likelihood = fullness_model.predict(image)
     # 
-    # updateTrashCanStatus(image, latitude, longitude, 1, compare_model) # NOT IMPLEMENTED 
+    # updateTrashCanStatusMain(image, latitude, longitude, 1, compare_model) # NOT IMPLEMENTED 
 
     return 'received data'
 
