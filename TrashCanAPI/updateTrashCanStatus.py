@@ -20,7 +20,7 @@ def updateTrashCanStatus(image, longitude, latitude, full_likelihood, model):
         return
     
     # Update Database
-    updateTrashCanStatus(trash_can_id, full_likelihood) # NOT IMPLEMENTED
+    updateTrashCanStatus(trash_can_id, full_likelihood)
 
     return 
 
@@ -86,10 +86,10 @@ def updateTrashCanStatus(trash_can_id, full_likelihood):
         return
 
 
-def getNearbyTrashCanImages(longitude, latitude, radius=100):
+def getNearbyTrashCanImages(longitude, latitude, range=0.4):
     '''
     Queries a database to find trashcans that are with longitude and latitude 
-    of a given radius. Then returns the folder path for the trash can ids that
+    of a given range. Then returns the folder path for the trash can ids that
     are given from the query.
     
     '''
