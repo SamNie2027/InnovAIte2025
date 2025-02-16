@@ -6,6 +6,9 @@
     "start": "nodemon server.js",
     "start:prod": "node ./dist/server.js"
   },
+  "engines": {
+  "node": "20.x"
+},
   "author": "",
   "license": "ISC",
   "description": "",
