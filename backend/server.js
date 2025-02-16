@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 
 app.post('/', (req, res) => {
-    console.log("Server has started on port 3000");
+    console.log("Post was called");
     res.send('post');
     //STUB
 });
@@ -15,3 +15,5 @@ app.post('/', (req, res) => {
 app.listen(3000, () => {
     console.log("Server has started on port 3000");
 });
+
+export {};
