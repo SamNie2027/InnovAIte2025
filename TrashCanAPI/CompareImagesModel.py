@@ -3,6 +3,7 @@ import torchvision.models as models
 import torch.nn as nn
 from torchvision import datasets, transforms
 from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 class CompareImagesModel():
     def __init__(self, base_model="resnet18"):
