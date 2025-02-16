@@ -30,4 +30,4 @@ if __name__ == '__main__':
     app.run(debug=True)
     # initialize models
     # fullness_model = FullnessModel()
-    compare_model = CompareImagesModel()
+    # compare_model = CompareImagesModel()
