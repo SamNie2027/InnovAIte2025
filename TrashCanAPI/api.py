@@ -19,7 +19,7 @@ def submit_image(fullness_model, compare_model):
         else:
             full_likelihood = fullness_model.predict(image)
 
-        updateTrashCanStatus(image, latitude, longitude, full_likelihood, compare_model)
+        updateTrashCanStatus(image, latitude, longitude, full_likelihood, compare_model) # NOT IMPLEMENTED
         
     
 
