@@ -1,7 +1,8 @@
-import { Button, Pressable, StyleSheet, Text, useState } from 'react-native';
+import { Button, Pressable, StyleSheet, Text } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useCameraPermissions, CameraType } from 'expo-camera';
 import useLocation from '../hooks/useLocation';
+import { useState } from 'react';
 
 export const ImageButton = () => {
   const [fonts] = useFonts({
@@ -49,7 +50,3 @@ const styles = StyleSheet.create({
         fontSize: 25,
     }
 });
-
-function useCameraPermissions(): [any, any] {
-    throw new Error('Function not implemented.');
-}
