@@ -16,4 +16,4 @@ app.listen(3000, () => {
     console.log("Server has started on port 3000");
 });
 
-export {};
+export default app;
