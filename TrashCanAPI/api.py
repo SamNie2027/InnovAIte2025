@@ -1,5 +1,5 @@
 from flask import Flask, request
-import subprocess
+import preprocess
 
 app = Flask(__name__)
 
@@ -8,6 +8,10 @@ def submit_image():
     image = request.form['image']
     latitude = request.form['latitude']
     longitude = request.form['longitude']
+    processed = preprocess(image)
+    if (processed) {
+        storeData(processed, latitude, longitude)
+    }
 
     return 'received data'
 

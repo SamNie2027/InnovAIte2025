@@ -51,6 +51,12 @@
         {
           "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera."
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow TattleTell to use your location."
+        }
       ]
     ],
     "experiments": {
