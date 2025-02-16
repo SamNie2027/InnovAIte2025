@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, jsonify, request
 import os
 
 app = Flask(__name__)
@@ -11,24 +11,31 @@ print(f"Starting Flask app on port {port}...")  # EARLY PRINT
 
 @app.route('/submitImage', methods=['POST'])
 def submit_image():
-    print('post called')
-    raw_image = request.json['image']
-    latitude = request.json['latitude']
-    longitude = request.json['longitude']
-    print(raw_image)
-    print(latitude)
-    print(longitude)
-    return 'received data'
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({"error": "Invalid request, no JSON received"}), 400
 
-if __name__ == '__main__':
-    port = os.environ.get("PORT")
-    print(f"PORT from environment: {port}")  # Debugging line
+        raw_image = data.get('image')
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
 
-    if not port:
-        print("⚠️ PORT environment variable is missing! Using default 5000.")
-        port = 5000
-    else:
-        port = int(port)
+        if not all([raw_image, latitude, longitude]):
+            return jsonify({"error": "Missing required fields"}), 400
 
-    print(f"Running on port {port}")  # Debugging output
-    app.run(debug=False, host='0.0.0.0', port=port)
+        print("Received image:", raw_image)
+        print("Latitude:", latitude)
+        print("Longitude:", longitude)
+
+        response = {
+            "message": "Image received successfully",
+            "data": {
+                "latitude": latitude,
+                "longitude": longitude
+            }
+        }
+        return jsonify(response), 200  # HTTP 200 OK
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  # Internal Server Error
+
