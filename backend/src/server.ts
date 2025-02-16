@@ -17,7 +17,7 @@ app.post("/", (req: PictureRequest, res: Response) => {
   request.post(
     {
       headers: { "Content-Type": "application/json" },
-      url: "https://innovaite2025-trashcan-api.onrender.com/submitImage",
+      url: "http://10.110.14.111:5000/submitImage",
       body: JSON.stringify(req.body),
     },
     function (error: any, response: { statusCode: number }, body: string) {
