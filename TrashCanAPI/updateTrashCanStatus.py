@@ -1,6 +1,7 @@
-from config import DATABASE_PARAM
+from config import DATABASE_PATH
 from PIL import Image
 import os
+import sqlite3
 
 def updateTrashCanStatus(image, longitude, latitude, full_likelihood, model):
     '''
@@ -20,7 +21,7 @@ def updateTrashCanStatus(image, longitude, latitude, full_likelihood, model):
         return
     
     # Update Database
-    updateTrashCanStatus(trash_can_id, full_likelihood) # NOT IMPLEMENTED
+    updateTrashCanStatus(trash_can_id, full_likelihood)
 
     return 
 
@@ -42,6 +43,8 @@ def matchTrashCanID(image, image_folder_paths, trash_can_ids, model):
 
     ranking = {}
 
+    image = cutOutTrashCan(image)
+
     for i, folder_path in enumerate(image_folder_paths):
         # TODO: get all paths for all images in this folder
         image_paths = [os.path.join(folder_path, fname) for fname in os.listdir(folder_path) if fname.endswith(('.png', '.jpg', '.jpeg'))]
@@ -49,7 +52,7 @@ def matchTrashCanID(image, image_folder_paths, trash_can_ids, model):
 
         trash_can_id = trash_can_ids[i]
         for image_path in image_paths:
-            stored_image = Image.open(image_path)
+            stored_image = cutOutTrashCan(Image.open(image_path))
             similarity = model.predict(image, stored_image)
             if trash_can_id in ranking:
                 ranking[trash_can_id] = max(ranking[trash_can_id], similarity)
@@ -71,25 +74,58 @@ def cutOutTrashCan(image):
     return image
 
 def updateTrashCanStatus(trash_can_id, full_likelihood):
-    '''
-    Update database based on full_likelihood level
-    '''
+    """
+    Update the 'is_full' status of a trash can in the 'trash_cans' table.
 
-    if full_likelihood == -1:
-        # means trashcan is empty
-        # update as empty now
-        return
-    else:
-        # Assumes trashcan is full
-        # update as full now
+    :param trash_can_id: ID of the trash can to update.
+    :param full_likelihood: 
+        - -1 indicates the trash can is emptied (is_full = false).
+        - Any other value indicates the trash can is full (is_full = true).
+    """
+    connection = None
+    cursor = None
+    try:
+        # 1. Connect to the SQLite database
+        connection = sqlite3.connect(DATABASE_PATH)
+        cursor = connection.cursor()
 
-        return
+        # 2. Determine whether to mark as empty or full
+        if full_likelihood <= 0:
+            query = """
+                UPDATE trash_cans
+                SET is_full = FALSE,
+                    last_updated = CURRENT_TIMESTAMP
+                WHERE trash_can_id = ?
+            """
+            print(f"Marking trash can {trash_can_id} as EMPTY.")
+        else:
+            query = """
+                UPDATE trash_cans
+                SET is_full = TRUE,
+                    last_updated = CURRENT_TIMESTAMP
+                WHERE trash_can_id = ?
+            """
+            print(f"Marking trash can {trash_can_id} as FULL.")
+
+        # 3. Execute the update
+        cursor.execute(query, (trash_can_id,))
+        connection.commit()
+
+    except Exception as e:
+        print(f"Error updating trash can {trash_can_id}: {str(e)}")
+
+    finally:
+        # 4. Close cursor and connection
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
 
 
-def getNearbyTrashCanImages(longitude, latitude, radius=100):
+def getNearbyTrashCanImages(longitude, latitude, range=0.4):
     '''
     Queries a database to find trashcans that are with longitude and latitude 
-    of a given radius. Then returns the folder path for the trash can ids that
+    of a given range. Then returns the folder path for the trash can ids that
     are given from the query.
     
     '''
