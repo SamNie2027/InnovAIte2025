@@ -153,5 +153,5 @@ class FullnessModel:
         predicted_class = class_labels[np.argmax(prediction)]
 
         # Return the prediction
-        return 'Full trash can' if predicted_class == 'Full trash can' else 'Empty trash can'
+        return 1 if predicted_class == 'Full Trash' else 0
 
