@@ -1,6 +1,5 @@
 from flask import Flask, request
 from preprocess import *
-import determineIfFull
 import updateTrashCanStatus
 import CompareImagesModel
 import FullnessModel
@@ -18,7 +17,7 @@ def submit_image(fullness_model, compare_model):
         if (city_worker):
             full_likelihood = -1
         else:
-            full_likelihood = determineIfFull(image, fullness_model)
+            full_likelihood = fullness_model.predict(image)
 
         updateTrashCanStatus(image, latitude, longitude, full_likelihood, compare_model)
         
@@ -28,5 +27,6 @@ def submit_image(fullness_model, compare_model):
 
 if __name__ == '__main__':
     app.run(debug=True)
+    # initialize models
     fullness_model = FullnessModel()
     compare_model = CompareImagesModel()
