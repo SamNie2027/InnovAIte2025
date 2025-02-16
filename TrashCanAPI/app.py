@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from preprocess import preprocess
-from updateTrashCanStatus import updateTrashCanStatusMain
-from CompareImagesModel import CompareImagesModel
+# from updateTrashCanStatus import updateTrashCanStatusMain
+# from CompareImagesModel import CompareImagesModel
 # from CompareImagesTFModel import CompareImagesModel
 # from FullnessModel import FullnessModel
 import os
@@ -43,7 +43,7 @@ def submit_image():
         #         full_likelihood = fullness_model.predict(image)
         # 
         full_likelihood = 1
-        updateTrashCanStatusMain(image, latitude, longitude, full_likelihood, compare_model) # NOT IMPLEMENTED 
+        # updateTrashCanStatusMain(image, latitude, longitude, full_likelihood, compare_model) # NOT IMPLEMENTED 
 
         response = {
             "message": "Image received successfully",
@@ -62,4 +62,4 @@ if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=port)
     # initialize models
     # fullness_model = FullnessModel()
-    compare_model = CompareImagesModel()
+    # compare_model = CompareImagesModel()
