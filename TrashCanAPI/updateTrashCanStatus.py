@@ -3,13 +3,13 @@ from PIL import Image
 import os
 import sqlite3
 
-def updateTrashCanStatus(image, longitude, latitude, full_likelihood, model):
+def updateTrashCanStatus(image, latitude, longitude, full_likelihood, model):
     '''
     Finds and updates the status of a trashcan in trashcan database. 
     '''
 
     # get labeled images for nearby trash cans
-    image_folder_paths, trash_can_ids = getNearbyTrashCanImages(longitude, latitude) # NOT IMPLEMENTED
+    image_folder_paths, trash_can_ids = getNearbyTrashCanImages(latitude, longitude)
 
     # determine which trash can id to update
     if (len(trash_can_ids) > 1):
@@ -122,13 +122,68 @@ def updateTrashCanStatus(trash_can_id, full_likelihood):
             connection.close()
 
 
-def getNearbyTrashCanImages(longitude, latitude, range=0.4):
+def getNearbyTrashCanImages(latitude, longitude, range=0.001):
     '''
     Queries a database to find trashcans that are with longitude and latitude 
     of a given range. Then returns the folder path for the trash can ids that
     are given from the query.
     
     '''
+    image_paths = []
+    trash_can_ids = []
 
+    connection = None
+    cursor = None
+    try:
+        # 1. Connect to the SQLite database
+        connection = sqlite3.connect(DATABASE_PATH)
+        cursor = connection.cursor()
 
-    return [], []
+         # 2. Query to find trash cans within the given latitude/longitude range
+        query = """
+        SELECT trash_can_id 
+        FROM trash_cans
+        WHERE gps_latitude BETWEEN ? AND ?
+          AND gps_longitude BETWEEN ? AND ?;
+        """
+
+        # Calculate boundary values
+        min_lat, max_lat = latitude - range, latitude + range
+        min_long, max_long = longitude - range, longitude + range
+
+        print(f"min lat: {min_lat} max_lat: {max_lat}")
+        print(f"min long: {min_long} max long: {max_long}")
+
+        # Execute the query
+        cursor.execute(query, (min_lat, max_lat, min_long, max_long))
+        trash_can_ids = [row[0] for row in cursor.fetchall()]
+
+        if trash_can_ids:
+            # 3. Query to retrieve image URLs along with their trash_can_id
+            query = """
+            SELECT trash_can_id, image_url 
+            FROM images
+            WHERE trash_can_id IN ({});
+            """.format(",".join("?" * len(trash_can_ids)))  # Dynamically format query with placeholders
+
+            cursor.execute(query, trash_can_ids)
+            
+            # Store image paths in a dictionary with trash_can_id as key
+            image_dict = {tc_id: [] for tc_id in trash_can_ids}  # Initialize empty lists
+            for tc_id, image_url in cursor.fetchall():
+                image_dict[tc_id].append(image_url)  # Append in case of multiple images per trash can
+
+            # 4. Ensure indexes match: extract images in the same order as trash_can_ids
+            image_paths = [image_dict[tc_id] if tc_id in image_dict else [] for tc_id in trash_can_ids]
+
+    except Exception as e:
+        print(f"Error getting nearbyTrashCans: {str(e)}")
+
+    finally:
+        # 4. Close cursor and connection
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+    return image_paths, trash_can_ids
