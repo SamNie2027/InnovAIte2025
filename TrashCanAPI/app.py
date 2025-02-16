@@ -8,9 +8,9 @@ print(f"Starting Flask app on port {port}...")  # EARLY PRINT
 @app.route('/submitImage', methods=['POST'])
 def submit_image():
     print('post called')
-    raw_image = request.form['image']
-    latitude = request.form['latitude']
-    longitude = request.form['longitude']
+    raw_image = request.json['image']
+    latitude = request.json['latitude']
+    longitude = request.json['longitude']
     print(raw_image)
     print(latitude)
     print(longitude)
