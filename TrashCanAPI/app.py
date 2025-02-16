@@ -29,5 +29,5 @@ def submit_image(fullness_model, compare_model):
 if __name__ == '__main__':
     app.run(debug=True)
     # initialize models
-    fullness_model = FullnessModel()
+    # fullness_model = FullnessModel()
     compare_model = CompareImagesModel()
