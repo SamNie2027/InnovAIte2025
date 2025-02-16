@@ -12,6 +12,7 @@ app.use(cors());
 
 app.post("/", (req: PictureRequest, res: Response) => {
   console.log("Post was called");
+  console.log(req.body);
   request.post(
     {
       headers: { "content-type": "application/json" },

@@ -32,9 +32,14 @@ const PhotoPreview = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          
+          image: "data:image/jpg;base64," + photo.base64,
+          latitude,
+          longitude
         }),
     }).then(response => response.json());
+    console.log("data:image/jpg;base64," + photo.base64);
+    console.log(latitude);
+    console.log(longitude);
   }
   return (
     <SafeAreaView style={styles.container}>
