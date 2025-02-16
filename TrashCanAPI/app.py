@@ -1,6 +1,10 @@
 from flask import Flask, request
 import os
+
 app = Flask(__name__)
+
+# Set the max content length for incoming requests (in bytes)
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100 MB limit
 
 port = int(os.environ.get("PORT", 5000))
 print(f"Starting Flask app on port {port}...")  # EARLY PRINT
@@ -14,16 +18,6 @@ def submit_image():
     print(raw_image)
     print(latitude)
     print(longitude)
-    # city_worker = request.form['city_worker'] # expected to be a boolean
-    # image = preprocess(raw_image)
-    # if (image):
-    #     if (city_worker):
-    #         full_likelihood = -1
-    #     else:
-    # full_likelihood = fullness_model.predict(image)
-    # 
-    # updateTrashCanStatus(image, latitude, longitude, 1, compare_model) # NOT IMPLEMENTED 
-
     return 'received data'
 
 if __name__ == '__main__':
@@ -38,4 +32,3 @@ if __name__ == '__main__':
 
     print(f"Running on port {port}")  # Debugging output
     app.run(debug=False, host='0.0.0.0', port=port)
-
