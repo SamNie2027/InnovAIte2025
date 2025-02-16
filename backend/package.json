@@ -17,12 +17,15 @@
     "es2020": "^1.1.9",
     "express": "^4.21.2",
     "pg": "^8.13.3",
+    "request": "^2.88.2",
     "ts-node": "^10.9.2",
     "tsc": "^2.0.4",
     "typescript": "^5.7.3"
   },
   "devDependencies": {
+    "@types/express": "^5.0.0",
     "@types/node": "^22.13.4",
+    "@types/request": "^2.48.12",
     "nodemon": "^3.1.9"
   }
 }

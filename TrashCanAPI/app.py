@@ -11,15 +11,18 @@ def submit_image(fullness_model, compare_model):
     raw_image = request.form['image']
     latitude = request.form['latitude']
     longitude = request.form['longitude']
-    city_worker = request.form['city_worker'] # expected to be a boolean
-    image = preprocess(raw_image)
-    if (image):
-        if (city_worker):
-            full_likelihood = -1
-        else:
-            full_likelihood = fullness_model.predict(image)
-
-        updateTrashCanStatus(image, latitude, longitude, full_likelihood, compare_model) # NOT IMPLEMENTED 
+    print(raw_image)
+    print(latitude)
+    print(longitude)
+    # city_worker = request.form['city_worker'] # expected to be a boolean
+    # image = preprocess(raw_image)
+    # if (image):
+    #     if (city_worker):
+    #         full_likelihood = -1
+    #     else:
+    #         full_likelihood = fullness_model.predict(image)
+    # 
+    #     updateTrashCanStatus(image, latitude, longitude, full_likelihood, compare_model) # NOT IMPLEMENTED 
 
     return 'received data'
 
