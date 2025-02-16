@@ -1,8 +1,4 @@
 from flask import Flask, request
-from preprocess import preprocess
-from updateTrashCanStatus import updateTrashCanStatus
-from CompareImagesModel import CompareImagesModel
-from FullnessModel import FullnessModel
 
 app = Flask(__name__)
 
@@ -15,7 +11,7 @@ def submit_image(fullness_model, compare_model):
     print(latitude)
     print(longitude)
     # city_worker = request.form['city_worker'] # expected to be a boolean
-    image = preprocess(raw_image)
+    # image = preprocess(raw_image)
     # if (image):
     #     if (city_worker):
     #         full_likelihood = -1
