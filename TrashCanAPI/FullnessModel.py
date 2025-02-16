@@ -1,10 +1,14 @@
 from sklearn.utils.class_weight import compute_class_weight
-
+import numpy as np
+import os
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import ResNet50
 from tensorflow.keras import layers, models
+from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.preprocessing import image
+from PIL import Image
 
 """
 Class used to train and predict if the trash can in the given image is full or empty
@@ -14,15 +18,18 @@ class FullnessModel:
     Initialization method.
     Pre-process data, build and train the model.
     """
-    def __init__(self, train_dir, validate_dir):
+    def __init__(self, load,train_dir = '../../../../Trash/Train', validate_dir = '../../../../Trash/Validate'):
         self.train_dir = train_dir
         self.validate_dir = validate_dir
         self.model = None
         self.train_generator = None
         self.validate_generator = None
-        self._prepare_data()
-        self._build_model()
-        self._train_model()
+        if load is True:
+            self._prepare_data()
+            self.load_mode()
+        else:
+            self._build_model()
+            self._train_model()
 
     """
     Data augmentation on training and validation 
@@ -99,14 +106,52 @@ class FullnessModel:
             callbacks=[early_stop]
         )
 
-    def predict(self, image):
-        if self.model is None:
-            raise ValueError("Model is not trained yet.")
+    def load_mode(self):
+        # Path to the folder
+        folder_path = "../"
 
-        result = self.model.predict(image)
-        class_indices = self.train_generator.class_indices
-        class_labels = list(class_indices.keys())
+        # Define the filename you're looking for
+        filename = "Fullness_model.h5"
 
-        predicted_class = class_labels[np.argmax(result)]
+        # Search for the file in the directory
+        file_path = os.path.join(folder_path, filename)
 
-        return 1 if predicted_class == 'Full trash' else 0
+        if os.path.exists(file_path):
+            print(f"File found at {file_path}")
+            # Load the model or perform any operation
+            self.model = load_model(file_path)
+            print("Model loaded successfully!")
+        else:
+            print(f"File {filename} not found.")
+
+
+    def predict(self, img):
+        # If the input is a PIL image, convert it to the correct format
+        if isinstance(img, Image.Image):
+            img = img.resize((224, 224))  # Resize the image to (224, 224)
+        else:
+            # If it's a path, load the image using Keras' image loader
+            img = image.load_img(img, target_size=(224, 224))
+
+        # Convert image to numpy array
+        img_array = image.img_to_array(img)
+
+        # Add batch dimension (1 image)
+        img_array = np.expand_dims(img_array, axis=0)
+
+        # Normalize the image (same as in training)
+        img_array = img_array / 255.0
+
+        # Make a prediction
+        prediction = self.model.predict(img_array)
+
+        # Get class labels (Make sure train_generator is present and accessible)
+        class_indices = self.train_generator.class_indices  # Get the class indices
+        class_labels = list(class_indices.keys())  # Get the class labels
+
+        # Get the class with the highest probability
+        predicted_class = class_labels[np.argmax(prediction)]
+
+        # Return the prediction
+        return 'Full trash can' if predicted_class == 'Full trash can' else 'Empty trash can'
+
