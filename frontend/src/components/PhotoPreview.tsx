@@ -25,22 +25,30 @@ const PhotoPreview = ({
   let {longitude, latitude, errorMsg} = useLocation();
 
   const handleUploadPhoto = () => {
-    fetch('https://innovaite2025.onrender.com/', {
+    fetch('https://innovaite2025.onrender.com', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          image: "data:image/jpg;base64," + photo.base64,
+          image: `data:image/jpeg;base64,${photo?.base64 || ''}`, // Ensure photo.base64 is defined
           latitude,
           longitude
         }),
-    }).then(response => response.json());
-    console.log("data:image/jpg;base64," + photo.base64);
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Server Response:", data); // Handle response
+    })
+    .catch(error => {
+        console.error("Error uploading photo:", error);
+    });
+
+    console.log(`data:image/jpeg;base64,${photo?.base64 || ''}`);
     console.log(latitude);
     console.log(longitude);
-  }
+};
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.box}>
