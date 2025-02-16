@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "start:prod": "node ./dist/server.js"
+    "start": "nodemon server.ts",
+    "start:prod": "node ./dist/server.ts"
   },
   "engines": {
     "node": "20.x"
