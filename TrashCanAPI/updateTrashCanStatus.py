@@ -33,6 +33,10 @@ def matchTrashCanID(image, image_folder_path, trash_can_ids, model):
     trash_can_ids is the trash can id for the folder paths given.
     model is the compare model.
     '''
+    matched_id = 1
+
+
+    return matched_id
 
 def updateTrashCanStatus(trash_can_id, full_likelihood):
     '''
@@ -40,13 +44,15 @@ def updateTrashCanStatus(trash_can_id, full_likelihood):
     '''
 
     if full_likelihood == -1:
-        # means trashcan was emptied
+        # means trashcan is empty
         # update as empty now
         return
-    
-    # actual logic
+    else:
+        # Assumes trashcan is full
+        # update as full now
 
-    return
+        return
+
 
 def getNearbyTrashCanImages(longitude, latitude, radius=100):
     '''
