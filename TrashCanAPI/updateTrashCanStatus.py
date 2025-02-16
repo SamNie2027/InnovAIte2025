@@ -35,6 +35,7 @@ def matchTrashCanID(image, image_folder_path, trash_can_ids, model):
     '''
     matched_id = 1
 
+    
 
     return matched_id
 
